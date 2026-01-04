@@ -2,6 +2,7 @@
 let currentDate = new Date();
 let selectedDate = null;
 let diaries = {};
+let currentUser = null;
 
 // DOM要素
 const calendarDays = document.getElementById('calendarDays');
@@ -16,17 +17,29 @@ const saveBtn = document.getElementById('saveBtn');
 const prevMonthBtn = document.getElementById('prevMonth');
 const nextMonthBtn = document.getElementById('nextMonth');
 
+// 認証関連DOM要素
+const signInBtn = document.getElementById('signInBtn');
+const userMenu = document.getElementById('userMenu');
+const userIconBtn = document.getElementById('userIconBtn');
+const dropdownMenu = document.getElementById('dropdownMenu');
+const userInfo = document.getElementById('userInfo');
+const logoutBtn = document.getElementById('logoutBtn');
+
 // 初期化
 function init() {
+    checkAuthStatus();
     loadDiaries();
     updateDateHeader();
     renderCalendar();
     setupEventListeners();
+    setupAuthListeners();
 
-    // アプリ起動時に今日の日記モーダルを自動表示
-    setTimeout(() => {
-        openDiaryModal(new Date());
-    }, 100);
+    // ログイン済みの場合のみ、アプリ起動時に今日の日記モーダルを自動表示
+    if (currentUser) {
+        setTimeout(() => {
+            openDiaryModal(new Date());
+        }, 100);
+    }
 }
 
 // LocalStorageから日記データを読み込み
@@ -236,6 +249,101 @@ function setupEventListeners() {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
             saveDiary();
+        }
+    });
+}
+
+// 認証状態をチェック
+function checkAuthStatus() {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        showUserMenu();
+    } else {
+        showSignInButton();
+    }
+}
+
+// サインインボタンを表示
+function showSignInButton() {
+    signInBtn.style.display = 'flex';
+    userMenu.style.display = 'none';
+}
+
+// ユーザーメニューを表示
+function showUserMenu() {
+    signInBtn.style.display = 'none';
+    userMenu.style.display = 'block';
+    if (currentUser) {
+        userInfo.textContent = currentUser.email || currentUser.name || 'ユーザー';
+    }
+}
+
+// Appleサインイン（モック実装）
+async function signInWithApple() {
+    // TODO: 実際のApple Sign In SDKを統合する
+    // 現在はモック実装
+
+    // モックユーザーデータ
+    const mockUser = {
+        id: 'user_' + Date.now(),
+        email: 'user@example.com',
+        name: 'Apple User',
+        provider: 'apple'
+    };
+
+    currentUser = mockUser;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+    showUserMenu();
+
+    // カレンダーを再描画
+    renderCalendar();
+
+    // 今日の日記を自動で開く
+    setTimeout(() => {
+        openDiaryModal(new Date());
+    }, 100);
+}
+
+// ログアウト
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    dropdownMenu.style.display = 'none';
+    showSignInButton();
+
+    // カレンダーを再描画
+    renderCalendar();
+}
+
+// ドロップダウンメニューをトグル
+function toggleDropdown() {
+    if (dropdownMenu.style.display === 'none') {
+        dropdownMenu.style.display = 'block';
+    } else {
+        dropdownMenu.style.display = 'none';
+    }
+}
+
+// 認証関連イベントリスナーを設定
+function setupAuthListeners() {
+    // サインインボタン
+    signInBtn.addEventListener('click', signInWithApple);
+
+    // ユーザーアイコンボタン
+    userIconBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+    });
+
+    // ログアウトボタン
+    logoutBtn.addEventListener('click', logout);
+
+    // ドロップダウン外をクリックしたら閉じる
+    document.addEventListener('click', (e) => {
+        if (!userMenu.contains(e.target)) {
+            dropdownMenu.style.display = 'none';
         }
     });
 }

@@ -10,6 +10,105 @@ body {
     color: #1C1A1C;
 }
 
+/* 認証エリア */
+.auth-area {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.apple-signin-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1C1A1C;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.apple-signin-btn:hover {
+    background: #2C2A2C;
+    transform: translateY(-1px);
+}
+
+.user-menu {
+    position: relative;
+}
+
+.user-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1C1A1C;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-icon-btn:hover {
+    background: #2C2A2C;
+    transform: scale(1.05);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 12px;
+    min-width: 200px;
+    animation: slideDown 0.2s;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-info {
+    padding: 8px 12px;
+    border-bottom: 1px solid #E0E0E0;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #1C1A1C;
+}
+
+.logout-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #F76B1A;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: #F5F5F5;
+}
+
 .container {
     max-width: 600px;
     margin: 0 auto;
@@ -252,6 +351,35 @@ body {
 
 /* レスポンシブ対応 */
 @media (max-width: 600px) {
+    .auth-area {
+        top: 10px;
+        right: 10px;
+    }
+
+    .apple-signin-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+
+    .apple-signin-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .user-icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .user-icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .dropdown-menu {
+        min-width: 180px;
+    }
+
     .container {
         padding: 60px 20px 20px;
     }
