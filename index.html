@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日記アプリ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>日記アプリ</h1>
+        </header>
+
+        <!-- カレンダービュー -->
+        <div class="calendar-view">
+            <div class="calendar-header">
+                <button id="prevMonth" class="nav-btn">&lt;</button>
+                <h2 id="currentMonth"></h2>
+                <button id="nextMonth" class="nav-btn">&gt;</button>
+            </div>
+            <div class="calendar-weekdays">
+                <div class="weekday">日</div>
+                <div class="weekday">月</div>
+                <div class="weekday">火</div>
+                <div class="weekday">水</div>
+                <div class="weekday">木</div>
+                <div class="weekday">金</div>
+                <div class="weekday">土</div>
+            </div>
+            <div id="calendarDays" class="calendar-days"></div>
+        </div>
+    </div>
+
+    <!-- 日記編集モーダル -->
+    <div id="diaryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="cancelBtn" class="header-btn">キャンセル</button>
+                <h3 id="modalDate"></h3>
+                <button id="saveBtn" class="header-btn save-btn">保存</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="diaryText" placeholder="今日の出来事を書いてください..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
