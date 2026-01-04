@@ -32,17 +32,15 @@
         </div>
     </div>
 
-    <!-- 日記編集モーダル -->
+    <!-- 日記編集モーダル（全画面） -->
     <div id="diaryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button id="cancelBtn" class="header-btn">キャンセル</button>
-                <h3 id="modalDate"></h3>
-                <button id="saveBtn" class="header-btn save-btn">保存</button>
-            </div>
-            <div class="modal-body">
-                <textarea id="diaryText" placeholder="今日の出来事を書いてください..."></textarea>
-            </div>
+        <div class="modal-header">
+            <button id="cancelBtn" class="header-btn">キャンセル</button>
+            <h3 id="modalDate"></h3>
+            <button id="saveBtn" class="header-btn save-btn">保存</button>
+        </div>
+        <div class="modal-body">
+            <div id="diaryText" class="diary-content" contenteditable="true" data-placeholder="今日の出来事を書いてください..."></div>
         </div>
     </div>
 

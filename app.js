@@ -133,11 +133,21 @@ function openDiaryModal(date) {
     modalDate.textContent = formatDateDisplay(date);
 
     // 既存の日記があれば読み込み
-    diaryText.value = diaries[dateKey] || '';
+    diaryText.textContent = diaries[dateKey] || '';
 
     // モーダルを表示
     modal.classList.add('show');
-    diaryText.focus();
+
+    // カーソルをコンテンツの最後に移動
+    setTimeout(() => {
+        diaryText.focus();
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(diaryText);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }, 100);
 }
 
 // 日記モーダルを閉じる
@@ -151,7 +161,7 @@ function saveDiary() {
     if (!selectedDate) return;
 
     const dateKey = formatDateKey(selectedDate);
-    const content = diaryText.value.trim();
+    const content = diaryText.textContent.trim();
 
     if (content === '') {
         // 空の場合は日記を削除
@@ -173,13 +183,6 @@ function setupEventListeners() {
 
     // キャンセルボタン
     cancelBtn.addEventListener('click', closeDiaryModal);
-
-    // モーダルの外側をクリックで閉じる
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeDiaryModal();
-        }
-    });
 
     // Escキーでモーダルを閉じる
     document.addEventListener('keydown', (e) => {
