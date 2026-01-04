@@ -67,10 +67,13 @@ function updateDateHeader() {
                        'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+    // 今日の日付情報を表示
     dayNumber.textContent = String(today.getDate()).padStart(2, '0');
-    monthName.textContent = monthNames[today.getMonth()];
     dayOfWeek.textContent = dayNames[today.getDay()];
-    yearNumber.textContent = today.getFullYear();
+
+    // 表示中の月と年を表示
+    monthName.textContent = monthNames[currentDate.getMonth()];
+    yearNumber.textContent = currentDate.getFullYear();
 }
 
 // カレンダーを描画

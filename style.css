@@ -18,7 +18,15 @@ body {
 
 /* 日付ヘッダー */
 .date-header {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
+}
+
+.day-of-week {
+    font-size: 40px;
+    font-weight: bold;
+    color: #F76B1A;
+    line-height: 1.2;
+    margin-bottom: 0;
 }
 
 .day-number {
@@ -29,24 +37,16 @@ body {
     margin-bottom: 0;
 }
 
+.month-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .month-name {
     font-size: 40px;
     font-weight: bold;
     color: #1C1A1C;
-    line-height: 1.2;
-}
-
-.header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0;
-}
-
-.day-of-week {
-    font-size: 40px;
-    font-weight: bold;
-    color: #84817E;
     line-height: 1.2;
 }
 
@@ -80,6 +80,7 @@ body {
     font-weight: normal;
     color: #84817E;
     line-height: 1.2;
+    margin-bottom: 24px;
 }
 
 /* カレンダービュー */
@@ -149,16 +150,16 @@ body {
 
 /* 日記が記載されている日（今日） */
 .day.has-diary.today {
-    background: #F47E42;
-    border: 1px solid #F47E42;
+    background: #F76B1A;
+    border: 1px solid #F76B1A;
     color: #1C1A1C;
 }
 
 /* 日記未記載の今日 */
 .day.today:not(.has-diary) {
-    background: #F47E42;
-    border: 1px solid #F47E42;
-    color: #1C1A1C;
+    background: #84817E;
+    border: 2px solid #F76B1A;
+    color: #DBD8D3;
 }
 
 /* モーダル（全画面） */
@@ -169,7 +170,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: white;
+    background: #D3D0CB;
     z-index: 1000;
     flex-direction: column;
 }
@@ -193,8 +194,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    border-bottom: 1px solid #ecf0f1;
-    background: white;
+    border-bottom: 1px solid #C4C1BC;
+    background: #D3D0CB;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -202,14 +203,14 @@ body {
 
 .modal-header h3 {
     font-size: 20px;
-    color: #2c3e50;
+    color: #1C1A1C;
     flex: 1;
 }
 
 .header-btn {
     background: transparent;
     border: none;
-    color: #3498db;
+    color: #F76B1A;
     font-size: 16px;
     cursor: pointer;
     padding: 10px 16px;
@@ -218,7 +219,7 @@ body {
 }
 
 .header-btn:hover {
-    background: #ecf0f1;
+    background: #C4C1BC;
 }
 
 .complete-btn {
@@ -236,15 +237,16 @@ body {
     padding: 40px;
     font-size: 18px;
     line-height: 1.8;
-    color: #2c3e50;
+    color: #1C1A1C;
     outline: none;
     white-space: pre-wrap;
     word-wrap: break-word;
+    background: #D3D0CB;
 }
 
 .diary-content:empty:before {
     content: attr(data-placeholder);
-    color: #bdc3c7;
+    color: #84817E;
     pointer-events: none;
 }
 
@@ -254,15 +256,15 @@ body {
         padding: 60px 20px 20px;
     }
 
+    .day-of-week {
+        font-size: 28px;
+    }
+
     .day-number {
         font-size: 80px;
     }
 
     .month-name {
-        font-size: 28px;
-    }
-
-    .day-of-week {
         font-size: 28px;
     }
 
