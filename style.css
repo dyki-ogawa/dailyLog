@@ -18,25 +18,23 @@ body {
     z-index: 100;
 }
 
-.google-signin-btn {
+.signin-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #84817E;
+    border: none;
+    color: #DBD8D3;
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: white;
-    color: #3c4043;
-    border: 1px solid #dadce0;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
+    justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.google-signin-btn:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    background: #f8f9fa;
+.signin-icon-btn:hover {
+    background: #1C1A1C;
+    transform: scale(1.05);
 }
 
 .user-menu {
@@ -357,14 +355,14 @@ body {
         right: 10px;
     }
 
-    .google-signin-btn {
-        padding: 8px 16px;
-        font-size: 12px;
+    .signin-icon-btn {
+        width: 36px;
+        height: 36px;
     }
 
-    .google-signin-btn svg {
-        width: 16px;
-        height: 16px;
+    .signin-icon-btn svg {
+        width: 18px;
+        height: 18px;
     }
 
     .user-icon-btn {
