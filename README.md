@@ -10,6 +10,45 @@
 - ⚡ 起動時に今日の日記が自動で開く
 - 🎨 日記記載済みの日付を視覚的に区別
 
+## Google認証の設定
+
+このアプリはGoogleアカウントでのログインが必要です。以下の手順でGoogle Cloud Consoleを設定してください。
+
+### 1. Google Cloud Consoleでプロジェクトを作成
+
+1. [Google Cloud Console](https://console.cloud.google.com/)にアクセス
+2. 新しいプロジェクトを作成（または既存のプロジェクトを選択）
+
+### 2. OAuth 2.0クライアントIDを作成
+
+1. **APIとサービス** > **認証情報** に移動
+2. **認証情報を作成** > **OAuth 2.0クライアントID** を選択
+3. アプリケーションの種類: **ウェブアプリケーション** を選択
+4. 名前: 任意の名前（例: 日記アプリ）
+5. **承認済みのJavaScript生成元** に以下を追加:
+   - `http://localhost:8000` (ローカル開発用)
+   - `https://dyki-ogawa.github.io` (GitHub Pages用)
+6. **承認済みのリダイレクトURI** は空欄でOK
+7. **作成** をクリック
+8. 表示されたクライアントIDをコピー
+
+### 3. アプリにクライアントIDを設定
+
+`app.js` の9行目を編集:
+
+```javascript
+const GOOGLE_CLIENT_ID = 'あなたのクライアントID.apps.googleusercontent.com';
+```
+
+コピーしたクライアントIDを貼り付けてください。
+
+### 4. 動作確認
+
+- ローカルサーバーを起動してブラウザで開く
+- 右上のアイコンをクリック
+- Googleログインプロンプトが表示される
+- Googleアカウントを選択してログイン
+
 ## 機能
 
 ### カレンダービュー
@@ -80,6 +119,7 @@ npx http-server
 - CSS3
 - Vanilla JavaScript
 - LocalStorage API
+- Google Identity Services (認証)
 
 ## ライセンス
 

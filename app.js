@@ -4,6 +4,10 @@ let selectedDate = null;
 let diaries = {};
 let currentUser = null;
 
+// Google Sign-In設定
+// TODO: Google Cloud ConsoleでOAuth 2.0クライアントIDを取得して設定してください
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
 // DOM要素
 const calendarDays = document.getElementById('calendarDays');
 const dayNumber = document.getElementById('dayNumber');
@@ -33,6 +37,7 @@ function init() {
     renderCalendar();
     setupEventListeners();
     setupAuthListeners();
+    initializeGoogleSignIn();
 
     // ログイン済みの場合のみ、アプリ起動時に今日の日記モーダルを自動表示
     if (currentUser) {
@@ -279,20 +284,39 @@ function showUserMenu() {
     }
 }
 
-// Googleサインイン（モック実装）
-async function signInWithGoogle() {
-    // TODO: 実際のGoogle Sign In SDKを統合する
-    // 現在はモック実装
+// Google Sign-Inを初期化
+function initializeGoogleSignIn() {
+    // Google Identity Servicesライブラリが読み込まれるまで待機
+    if (typeof google === 'undefined') {
+        setTimeout(initializeGoogleSignIn, 100);
+        return;
+    }
 
-    // モックユーザーデータ
-    const mockUser = {
-        id: 'user_' + Date.now(),
-        email: 'user@example.com',
-        name: 'Google User',
+    // Google Sign-Inを初期化
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true
+    });
+}
+
+// Googleログイン後のレスポンスを処理
+function handleCredentialResponse(response) {
+    // JWTトークンをデコード
+    const credential = response.credential;
+    const payload = parseJwt(credential);
+
+    // ユーザー情報を保存
+    const user = {
+        id: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture,
         provider: 'google'
     };
 
-    currentUser = mockUser;
+    currentUser = user;
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
     showUserMenu();
@@ -306,8 +330,34 @@ async function signInWithGoogle() {
     }, 100);
 }
 
+// JWTトークンをパース
+function parseJwt(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+}
+
+// Googleサインイン
+function signInWithGoogle() {
+    // Google One Tap UIを表示、またはボタンクリックでサインインプロンプトを表示
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // One Tapが表示されない場合は、従来のサインインフローを使用
+            console.log('One Tap not displayed, notification:', notification.getNotDisplayedReason());
+        }
+    });
+}
+
 // ログアウト
 function logout() {
+    // Google Sign-Outを実行
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.disableAutoSelect();
+    }
+
     currentUser = null;
     localStorage.removeItem('currentUser');
     dropdownMenu.style.display = 'none';
