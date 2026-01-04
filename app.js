@@ -10,7 +10,6 @@ const modal = document.getElementById('diaryModal');
 const modalDate = document.getElementById('modalDate');
 const diaryText = document.getElementById('diaryText');
 const saveBtn = document.getElementById('saveBtn');
-const cancelBtn = document.getElementById('cancelBtn');
 const prevMonthBtn = document.getElementById('prevMonth');
 const nextMonthBtn = document.getElementById('nextMonth');
 
@@ -178,11 +177,8 @@ function saveDiary() {
 
 // イベントリスナーを設定
 function setupEventListeners() {
-    // 保存ボタン
+    // 完了ボタン
     saveBtn.addEventListener('click', saveDiary);
-
-    // キャンセルボタン
-    cancelBtn.addEventListener('click', closeDiaryModal);
 
     // Escキーでモーダルを閉じる
     document.addEventListener('keydown', (e) => {
