@@ -133,7 +133,7 @@ function openDiaryModal(date) {
     modalDate.textContent = formatDateDisplay(date);
 
     // 既存の日記があれば読み込み
-    diaryText.textContent = diaries[dateKey] || '';
+    diaryText.innerText = diaries[dateKey] || '';
 
     // モーダルを表示
     modal.classList.add('show');
@@ -161,7 +161,7 @@ function saveDiary() {
     if (!selectedDate) return;
 
     const dateKey = formatDateKey(selectedDate);
-    const content = diaryText.textContent.trim();
+    const content = diaryText.innerText.trim();
 
     if (content === '') {
         // 空の場合は日記を削除
