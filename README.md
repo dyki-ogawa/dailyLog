@@ -42,7 +42,7 @@
 3. **左サイドバーの「Pages」をクリック**
 
 4. **Source設定**
-   - **Branch**: `claude/diary-calendar-app-QKK4O` を選択
+   - **Branch**: `claude/main-QKK4O` を選択
    - **Folder**: `/ (root)` を選択
    - **Save** ボタンをクリック
 
