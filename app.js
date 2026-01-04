@@ -279,17 +279,17 @@ function showUserMenu() {
     }
 }
 
-// Appleサインイン（モック実装）
-async function signInWithApple() {
-    // TODO: 実際のApple Sign In SDKを統合する
+// Googleサインイン（モック実装）
+async function signInWithGoogle() {
+    // TODO: 実際のGoogle Sign In SDKを統合する
     // 現在はモック実装
 
     // モックユーザーデータ
     const mockUser = {
         id: 'user_' + Date.now(),
         email: 'user@example.com',
-        name: 'Apple User',
-        provider: 'apple'
+        name: 'Google User',
+        provider: 'google'
     };
 
     currentUser = mockUser;
@@ -329,7 +329,7 @@ function toggleDropdown() {
 // 認証関連イベントリスナーを設定
 function setupAuthListeners() {
     // サインインボタン
-    signInBtn.addEventListener('click', signInWithApple);
+    signInBtn.addEventListener('click', signInWithGoogle);
 
     // ユーザーアイコンボタン
     userIconBtn.addEventListener('click', (e) => {

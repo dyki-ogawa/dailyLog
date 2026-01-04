@@ -18,24 +18,25 @@ body {
     z-index: 100;
 }
 
-.apple-signin-btn {
+.google-signin-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: #1C1A1C;
-    color: white;
-    border: none;
+    gap: 12px;
+    background: white;
+    color: #3c4043;
+    border: 1px solid #dadce0;
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.apple-signin-btn:hover {
-    background: #2C2A2C;
-    transform: translateY(-1px);
+.google-signin-btn:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    background: #f8f9fa;
 }
 
 .user-menu {
@@ -356,14 +357,14 @@ body {
         right: 10px;
     }
 
-    .apple-signin-btn {
+    .google-signin-btn {
         padding: 8px 16px;
         font-size: 12px;
     }
 
-    .apple-signin-btn svg {
-        width: 14px;
-        height: 14px;
+    .google-signin-btn svg {
+        width: 16px;
+        height: 16px;
     }
 
     .user-icon-btn {
