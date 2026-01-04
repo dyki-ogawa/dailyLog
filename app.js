@@ -5,7 +5,10 @@ let diaries = {};
 
 // DOM要素
 const calendarDays = document.getElementById('calendarDays');
-const currentMonthElement = document.getElementById('currentMonth');
+const dayNumber = document.getElementById('dayNumber');
+const monthName = document.getElementById('monthName');
+const dayOfWeek = document.getElementById('dayOfWeek');
+const yearNumber = document.getElementById('yearNumber');
 const modal = document.getElementById('diaryModal');
 const modalDate = document.getElementById('modalDate');
 const diaryText = document.getElementById('diaryText');
@@ -16,6 +19,7 @@ const nextMonthBtn = document.getElementById('nextMonth');
 // 初期化
 function init() {
     loadDiaries();
+    updateDateHeader();
     renderCalendar();
     setupEventListeners();
 
@@ -56,13 +60,26 @@ function formatDateDisplay(date) {
     return `${year}年${month}月${day}日 (${weekday})`;
 }
 
+// ヘッダーの日付情報を更新
+function updateDateHeader() {
+    const today = new Date();
+    const monthNames = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
+                       'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    dayNumber.textContent = String(today.getDate()).padStart(2, '0');
+    monthName.textContent = monthNames[today.getMonth()];
+    dayOfWeek.textContent = dayNames[today.getDay()];
+    yearNumber.textContent = today.getFullYear();
+}
+
 // カレンダーを描画
 function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
-    // 月の表示を更新
-    currentMonthElement.textContent = `${year}年${month + 1}月`;
+    // ヘッダー情報を更新
+    updateDateHeader();
 
     // カレンダーの日付をクリア
     calendarDays.innerHTML = '';
@@ -71,9 +88,14 @@ function renderCalendar() {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
-    // 前月の日付を追加（月の最初の日の曜日分）
-    const firstDayOfWeek = firstDay.getDay();
-    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+    // 前月の日付を追加（月曜始まりなので調整）
+    // 月曜日 = 1, 火曜日 = 2, ..., 日曜日 = 0
+    let firstDayOfWeek = firstDay.getDay();
+    // 日曜日の場合は7に変換（月曜始まりのため）
+    if (firstDayOfWeek === 0) firstDayOfWeek = 7;
+
+    // 月曜日からスタートするように前月の日付を追加
+    for (let i = firstDayOfWeek - 2; i >= 0; i--) {
         const date = new Date(year, month, -i);
         createDayElement(date, true);
     }
@@ -99,19 +121,26 @@ function createDayElement(date, isOtherMonth) {
     dayElement.className = 'day';
     dayElement.textContent = date.getDate();
 
+    const today = new Date();
+    const isToday = date.toDateString() === today.toDateString();
+    const dateKey = formatDateKey(date);
+    const hasDiary = diaries[dateKey] && diaries[dateKey].trim() !== '';
+
     if (isOtherMonth) {
+        // 当月でない日付（前月・次月）
         dayElement.classList.add('other-month');
+    } else {
+        // 当月の日付
+        dayElement.classList.add('current-month');
     }
 
-    // 今日の日付をハイライト
-    const today = new Date();
-    if (date.toDateString() === today.toDateString()) {
+    // 今日の日付
+    if (isToday) {
         dayElement.classList.add('today');
     }
 
-    // 日記が記載されている日付をハイライト
-    const dateKey = formatDateKey(date);
-    if (diaries[dateKey] && diaries[dateKey].trim() !== '') {
+    // 日記が記載されている日付
+    if (hasDiary) {
         dayElement.classList.add('has-diary');
     }
 

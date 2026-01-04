@@ -6,80 +6,106 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
+    background-color: #D3D0CB;
+    color: #1C1A1C;
 }
 
 .container {
-    max-width: 900px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 100px 40px 40px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
+/* 日付ヘッダー */
+.date-header {
+    margin-bottom: 40px;
 }
 
-header h1 {
-    font-size: 28px;
-    color: #2c3e50;
+.day-number {
+    font-size: 140px;
+    font-weight: bold;
+    color: #1C1A1C;
+    line-height: 1;
+    margin-bottom: 0;
+}
+
+.month-name {
+    font-size: 40px;
+    font-weight: bold;
+    color: #1C1A1C;
+    line-height: 1.2;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0;
+}
+
+.day-of-week {
+    font-size: 40px;
+    font-weight: bold;
+    color: #84817E;
+    line-height: 1.2;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-btn {
+    background: transparent;
+    border: 1px solid #84817E;
+    color: #84817E;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: #84817E;
+    color: #D3D0CB;
+}
+
+.year-number {
+    font-size: 40px;
+    font-weight: normal;
+    color: #84817E;
+    line-height: 1.2;
 }
 
 /* カレンダービュー */
 .calendar-view {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.calendar-header h2 {
-    font-size: 22px;
-    color: #2c3e50;
-}
-
-.nav-btn {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background 0.3s;
-}
-
-.nav-btn:hover {
-    background: #2980b9;
+    background: transparent;
 }
 
 .calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 4px;
+    margin-bottom: 8px;
 }
 
 .weekday {
     text-align: center;
-    font-weight: bold;
-    color: #7f8c8d;
-    padding: 10px 0;
-    font-size: 14px;
+    font-weight: 500;
+    color: #84817E;
+    padding: 8px 0;
+    font-size: 16px;
 }
 
 .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 4px;
 }
 
 .day {
@@ -87,36 +113,52 @@ header h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     transition: all 0.2s;
-    background: #f8f9fa;
-    border: 2px solid transparent;
+    background: transparent;
+    border: 1px solid #84817E;
+    color: #84817E;
 }
 
 .day:hover {
-    background: #e9ecef;
-    transform: scale(1.05);
+    transform: scale(1.1);
 }
 
+/* 当月でない日付（前月・次月） */
 .day.other-month {
-    color: #bdc3c7;
+    background: transparent;
+    border: 1px solid #84817E;
+    color: #84817E;
 }
 
-.day.today {
-    border-color: #3498db;
-    font-weight: bold;
+/* 日記未記載の当月 */
+.day.current-month {
+    background: #84817E;
+    border: 1px solid #84817E;
+    color: #D3D0CB;
 }
 
+/* 日記が記載されている日（今日以外） */
 .day.has-diary {
-    background: #3498db;
-    color: white;
-    font-weight: bold;
+    background: #1C1A1C;
+    border: 1px solid #1C1A1C;
+    color: #D3D0CB;
 }
 
-.day.has-diary:hover {
-    background: #2980b9;
+/* 日記が記載されている日（今日） */
+.day.has-diary.today {
+    background: #F47E42;
+    border: 1px solid #F47E42;
+    color: #1C1A1C;
+}
+
+/* 日記未記載の今日 */
+.day.today:not(.has-diary) {
+    background: #F47E42;
+    border: 1px solid #F47E42;
+    color: #1C1A1C;
 }
 
 /* モーダル（全画面） */
@@ -209,19 +251,32 @@ header h1 {
 /* レスポンシブ対応 */
 @media (max-width: 600px) {
     .container {
-        padding: 10px;
+        padding: 60px 20px 20px;
     }
 
-    header h1 {
-        font-size: 22px;
+    .day-number {
+        font-size: 80px;
     }
 
-    .calendar-view {
-        padding: 15px;
+    .month-name {
+        font-size: 28px;
+    }
+
+    .day-of-week {
+        font-size: 28px;
+    }
+
+    .year-number {
+        font-size: 28px;
+    }
+
+    .weekday {
+        font-size: 12px;
+        padding: 4px 0;
     }
 
     .day {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .modal-header {
