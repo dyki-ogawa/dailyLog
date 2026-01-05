@@ -12,26 +12,27 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <!-- ログインエリア -->
-    <div class="auth-area" id="authArea">
-        <button id="signInBtn" class="signin-icon-btn">
-            <img src="icon-user-unauth.svg" alt="ログイン" width="26" height="26">
-        </button>
-        <div id="userMenu" class="user-menu" style="display: none;">
-            <button class="user-icon-btn" id="userIconBtn">
-                <img src="icon-user-auth.svg" alt="ユーザー" width="26" height="26">
-            </button>
-            <div class="dropdown-menu" id="dropdownMenu" style="display: none;">
-                <div class="user-info" id="userInfo"></div>
-                <button class="logout-btn" id="logoutBtn">ログアウト</button>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <!-- 日付ヘッダー -->
         <div class="date-header">
-            <div class="day-of-week" id="dayOfWeek">Sat</div>
+            <div class="day-of-week-row">
+                <div class="day-of-week" id="dayOfWeek">Sat</div>
+                <!-- ログインエリア -->
+                <div class="auth-area" id="authArea">
+                    <button id="signInBtn" class="signin-icon-btn">
+                        <img src="icon-user-unauth.svg" alt="ログイン" width="26" height="26">
+                    </button>
+                    <div id="userMenu" class="user-menu" style="display: none;">
+                        <button class="user-icon-btn" id="userIconBtn">
+                            <img src="icon-user-auth.svg" alt="ユーザー" width="26" height="26">
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu" style="display: none;">
+                            <div class="user-info" id="userInfo"></div>
+                            <button class="logout-btn" id="logoutBtn">ログアウト</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="day-number" id="dayNumber">03</div>
             <div class="month-row">
                 <div class="month-name" id="monthName">JANUARY</div>

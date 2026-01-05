@@ -12,10 +12,7 @@ body {
 
 /* 認証エリア */
 .auth-area {
-    position: fixed;
-    top: 20px;
-    right: max(20px, calc((100vw - 600px) / 2 + 40px));
-    z-index: 100;
+    position: relative;
 }
 
 .signin-icon-btn {
@@ -113,12 +110,19 @@ body {
 .container {
     max-width: 600px;
     margin: 0 auto;
-    padding: 100px 40px 40px;
+    padding: 40px 40px 40px;
 }
 
 /* 日付ヘッダー */
 .date-header {
     margin-bottom: 24px;
+}
+
+.day-of-week-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
 }
 
 .day-of-week {
@@ -352,11 +356,6 @@ body {
 
 /* レスポンシブ対応 */
 @media (max-width: 600px) {
-    .auth-area {
-        top: 10px;
-        right: 20px;
-    }
-
     .signin-icon-btn {
         width: 26px;
         height: 26px;
@@ -382,7 +381,7 @@ body {
     }
 
     .container {
-        padding: 60px 20px 20px;
+        padding: 20px 20px 20px;
     }
 
     .day-of-week {
