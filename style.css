@@ -14,27 +14,28 @@ body {
 .auth-area {
     position: fixed;
     top: 20px;
-    right: 20px;
+    right: max(20px, calc((100vw - 600px) / 2 + 40px));
     z-index: 100;
 }
 
 .signin-icon-btn {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background: #84817E;
+    background: none;
     border: none;
-    color: #DBD8D3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 0;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .signin-icon-btn:hover {
-    background: #1C1A1C;
     transform: scale(1.05);
+}
+
+.signin-icon-btn img {
+    display: block;
+    width: 40px;
+    height: 40px;
 }
 
 .user-menu {
@@ -44,20 +45,21 @@ body {
 .user-icon-btn {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background: #1C1A1C;
+    background: none;
     border: none;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 0;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .user-icon-btn:hover {
-    background: #2C2A2C;
     transform: scale(1.05);
+}
+
+.user-icon-btn img {
+    display: block;
+    width: 40px;
+    height: 40px;
 }
 
 .dropdown-menu {
@@ -352,7 +354,7 @@ body {
 @media (max-width: 600px) {
     .auth-area {
         top: 10px;
-        right: 10px;
+        right: 20px;
     }
 
     .signin-icon-btn {
@@ -360,9 +362,9 @@ body {
         height: 36px;
     }
 
-    .signin-icon-btn svg {
-        width: 18px;
-        height: 18px;
+    .signin-icon-btn img {
+        width: 36px;
+        height: 36px;
     }
 
     .user-icon-btn {
@@ -370,9 +372,9 @@ body {
         height: 36px;
     }
 
-    .user-icon-btn svg {
-        width: 18px;
-        height: 18px;
+    .user-icon-btn img {
+        width: 36px;
+        height: 36px;
     }
 
     .dropdown-menu {
