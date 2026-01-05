@@ -3,10 +3,24 @@ let currentDate = new Date();
 let selectedDate = null;
 let diaries = {};
 let currentUser = null;
+let db = null;
+let auth = null;
 
-// Google Sign-In設定
-// TODO: Google Cloud ConsoleでOAuth 2.0クライアントIDを取得して設定してください
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+// Firebase設定
+// TODO: Firebaseコンソールでプロジェクトを作成し、以下の設定を更新してください
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+// Firebaseを初期化
+firebase.initializeApp(firebaseConfig);
+auth = firebase.auth();
+db = firebase.firestore();
 
 // DOM要素
 const calendarDays = document.getElementById('calendarDays');
@@ -31,33 +45,96 @@ const logoutBtn = document.getElementById('logoutBtn');
 
 // 初期化
 function init() {
-    checkAuthStatus();
-    loadDiaries();
     updateDateHeader();
     renderCalendar();
     setupEventListeners();
     setupAuthListeners();
-    initializeGoogleSignIn();
 
-    // ログイン済みの場合のみ、アプリ起動時に今日の日記モーダルを自動表示
-    if (currentUser) {
-        setTimeout(() => {
-            openDiaryModal(new Date());
-        }, 100);
+    // Firebase認証状態を監視
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // ログイン済み
+            currentUser = {
+                id: user.uid,
+                email: user.email,
+                name: user.displayName,
+                picture: user.photoURL,
+                provider: 'google'
+            };
+            showUserMenu();
+            loadDiariesFromFirestore();
+
+            // アプリ起動時に今日の日記モーダルを自動表示
+            setTimeout(() => {
+                openDiaryModal(new Date());
+            }, 100);
+        } else {
+            // 未ログイン
+            currentUser = null;
+            diaries = {};
+            showSignInButton();
+            renderCalendar();
+        }
+    });
+}
+
+// Firestoreから日記データを読み込み
+async function loadDiariesFromFirestore() {
+    if (!currentUser) return;
+
+    try {
+        const snapshot = await db.collection('users')
+            .doc(currentUser.id)
+            .collection('diaries')
+            .get();
+
+        diaries = {};
+        snapshot.forEach((doc) => {
+            diaries[doc.id] = doc.data().content;
+        });
+
+        renderCalendar();
+    } catch (error) {
+        console.error('日記の読み込みエラー:', error);
     }
 }
 
-// LocalStorageから日記データを読み込み
-function loadDiaries() {
-    const savedDiaries = localStorage.getItem('diaries');
-    if (savedDiaries) {
-        diaries = JSON.parse(savedDiaries);
+// Firestoreに日記データを保存
+async function saveDiaryToFirestore(dateKey, content) {
+    if (!currentUser) return;
+
+    try {
+        await db.collection('users')
+            .doc(currentUser.id)
+            .collection('diaries')
+            .doc(dateKey)
+            .set({
+                content: content,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        console.log('日記を保存しました');
+    } catch (error) {
+        console.error('日記の保存エラー:', error);
+        alert('日記の保存に失敗しました。もう一度お試しください。');
     }
 }
 
-// LocalStorageに日記データを保存
-function saveDiaries() {
-    localStorage.setItem('diaries', JSON.stringify(diaries));
+// Firestoreから日記を削除
+async function deleteDiaryFromFirestore(dateKey) {
+    if (!currentUser) return;
+
+    try {
+        await db.collection('users')
+            .doc(currentUser.id)
+            .collection('diaries')
+            .doc(dateKey)
+            .delete();
+
+        console.log('日記を削除しました');
+    } catch (error) {
+        console.error('日記の削除エラー:', error);
+    }
 }
 
 // 日付をキーとして使用するためのフォーマット (YYYY-MM-DD)
@@ -206,8 +283,8 @@ function closeDiaryModal() {
 }
 
 // 日記を保存
-function saveDiary() {
-    if (!selectedDate) return;
+async function saveDiary() {
+    if (!selectedDate || !currentUser) return;
 
     const dateKey = formatDateKey(selectedDate);
     const content = diaryText.innerText.trim();
@@ -215,12 +292,13 @@ function saveDiary() {
     if (content === '') {
         // 空の場合は日記を削除
         delete diaries[dateKey];
+        await deleteDiaryFromFirestore(dateKey);
     } else {
         // 日記を保存
         diaries[dateKey] = content;
+        await saveDiaryToFirestore(dateKey, content);
     }
 
-    saveDiaries();
     closeDiaryModal();
     renderCalendar();
 }
@@ -258,17 +336,6 @@ function setupEventListeners() {
     });
 }
 
-// 認証状態をチェック
-function checkAuthStatus() {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        showUserMenu();
-    } else {
-        showSignInButton();
-    }
-}
-
 // サインインボタンを表示
 function showSignInButton() {
     signInBtn.style.display = 'flex';
@@ -284,87 +351,30 @@ function showUserMenu() {
     }
 }
 
-// Google Sign-Inを初期化
-function initializeGoogleSignIn() {
-    // Google Identity Servicesライブラリが読み込まれるまで待機
-    if (typeof google === 'undefined') {
-        setTimeout(initializeGoogleSignIn, 100);
-        return;
-    }
-
-    // Google Sign-Inを初期化
-    google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse,
-        auto_select: false,
-        cancel_on_tap_outside: true
-    });
-}
-
-// Googleログイン後のレスポンスを処理
-function handleCredentialResponse(response) {
-    // JWTトークンをデコード
-    const credential = response.credential;
-    const payload = parseJwt(credential);
-
-    // ユーザー情報を保存
-    const user = {
-        id: payload.sub,
-        email: payload.email,
-        name: payload.name,
-        picture: payload.picture,
-        provider: 'google'
-    };
-
-    currentUser = user;
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-    showUserMenu();
-
-    // カレンダーを再描画
-    renderCalendar();
-
-    // 今日の日記を自動で開く
-    setTimeout(() => {
-        openDiaryModal(new Date());
-    }, 100);
-}
-
-// JWTトークンをパース
-function parseJwt(token) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
-}
-
-// Googleサインイン
-function signInWithGoogle() {
-    // Google One Tap UIを表示、またはボタンクリックでサインインプロンプトを表示
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // One Tapが表示されない場合は、従来のサインインフローを使用
-            console.log('One Tap not displayed, notification:', notification.getNotDisplayedReason());
+// Googleサインイン（Firebase Authentication使用）
+async function signInWithGoogle() {
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+        // ログイン成功後は onAuthStateChanged で処理される
+    } catch (error) {
+        console.error('ログインエラー:', error);
+        if (error.code !== 'auth/popup-closed-by-user' && error.code !== 'auth/cancelled-popup-request') {
+            alert('ログインに失敗しました: ' + error.message);
         }
-    });
+    }
 }
 
 // ログアウト
-function logout() {
-    // Google Sign-Outを実行
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-        google.accounts.id.disableAutoSelect();
+async function logout() {
+    try {
+        await auth.signOut();
+        dropdownMenu.style.display = 'none';
+        // ログアウト成功後は onAuthStateChanged で処理される
+    } catch (error) {
+        console.error('ログアウトエラー:', error);
+        alert('ログアウトに失敗しました');
     }
-
-    currentUser = null;
-    localStorage.removeItem('currentUser');
-    dropdownMenu.style.display = 'none';
-    showSignInButton();
-
-    // カレンダーを再描画
-    renderCalendar();
 }
 
 // ドロップダウンメニューをトグル

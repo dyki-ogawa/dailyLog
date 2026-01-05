@@ -5,49 +5,96 @@
 ## 特徴
 
 - 📅 カレンダー形式で日記を管理
-- 💾 LocalStorageで自動保存
+- ☁️ Firebaseでクラウド保存（複数端末から同期可能）
+- 🔐 Googleアカウントでログイン
 - 📱 レスポンシブデザイン対応
 - ⚡ 起動時に今日の日記が自動で開く
 - 🎨 日記記載済みの日付を視覚的に区別
 
-## Google認証の設定
+## Firebase設定（必須）
 
-このアプリはGoogleアカウントでのログインが必要です。以下の手順でGoogle Cloud Consoleを設定してください。
+このアプリはFirebaseを使用してデータを保存し、Googleアカウントで認証します。以下の手順でFirebaseプロジェクトを設定してください。
 
-### 1. Google Cloud Consoleでプロジェクトを作成
+### 1. Firebaseプロジェクトを作成
 
-1. [Google Cloud Console](https://console.cloud.google.com/)にアクセス
-2. 新しいプロジェクトを作成（または既存のプロジェクトを選択）
+1. [Firebase Console](https://console.firebase.google.com/)にアクセス
+2. **プロジェクトを追加** をクリック
+3. プロジェクト名を入力（例: 日記アプリ）
+4. Google Analyticsは任意（不要な場合はオフにできます）
+5. **プロジェクトを作成** をクリック
 
-### 2. OAuth 2.0クライアントIDを作成
+### 2. Webアプリを追加
 
-1. **APIとサービス** > **認証情報** に移動
-2. **認証情報を作成** > **OAuth 2.0クライアントID** を選択
-3. アプリケーションの種類: **ウェブアプリケーション** を選択
-4. 名前: 任意の名前（例: 日記アプリ）
-5. **承認済みのJavaScript生成元** に以下を追加:
-   - `http://localhost:8000` (ローカル開発用)
-   - `https://dyki-ogawa.github.io` (GitHub Pages用)
-6. **承認済みのリダイレクトURI** は空欄でOK
-7. **作成** をクリック
-8. 表示されたクライアントIDをコピー
+1. Firebaseプロジェクトのダッシュボードで、**ウェブアイコン（</>）** をクリック
+2. アプリのニックネームを入力（例: 日記Webアプリ）
+3. **Firebase Hostingを設定する** はチェック不要
+4. **アプリを登録** をクリック
+5. 表示される `firebaseConfig` をコピー
 
-### 3. アプリにクライアントIDを設定
+### 3. Firebase Authenticationを有効化
 
-`app.js` の9行目を編集:
+1. 左メニューから **Authentication** をクリック
+2. **始める** をクリック
+3. **Sign-in method** タブをクリック
+4. **Google** を選択して有効化
+5. サポートメールを選択して **保存**
+
+### 4. Cloud Firestoreを有効化
+
+1. 左メニューから **Firestore Database** をクリック
+2. **データベースの作成** をクリック
+3. **本番環境モードで開始** を選択（後でルールを設定します）
+4. ロケーションを選択（例: `asia-northeast1` (東京)）
+5. **有効にする** をクリック
+
+### 5. Firestoreセキュリティルールを設定
+
+1. Firestore Databaseページの **ルール** タブをクリック
+2. 以下のルールを設定（ユーザーは自分のデータのみ読み書き可能）:
 
 ```javascript
-const GOOGLE_CLIENT_ID = 'あなたのクライアントID.apps.googleusercontent.com';
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/diaries/{diaryId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
 ```
 
-コピーしたクライアントIDを貼り付けてください。
+3. **公開** をクリック
 
-### 4. 動作確認
+### 6. アプリにFirebase設定を追加
+
+`app.js` の11〜18行目を編集:
+
+```javascript
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+```
+
+手順2でコピーした `firebaseConfig` の値を貼り付けてください。
+
+### 7. 承認済みドメインを追加（GitHub Pages用）
+
+1. Firebase Console > **Authentication** > **Settings** タブ
+2. **承認済みドメイン** セクションで **ドメインを追加**
+3. `dyki-ogawa.github.io` を追加
+
+### 8. 動作確認
 
 - ローカルサーバーを起動してブラウザで開く
 - 右上のアイコンをクリック
-- Googleログインプロンプトが表示される
+- Googleログインポップアップが表示される
 - Googleアカウントを選択してログイン
+- 日記を書いて保存し、別のブラウザやデバイスでログインして同期を確認
 
 ## 機能
 
@@ -118,8 +165,8 @@ npx http-server
 - HTML5
 - CSS3
 - Vanilla JavaScript
-- LocalStorage API
-- Google Identity Services (認証)
+- Firebase Authentication (Googleログイン)
+- Cloud Firestore (データ保存・同期)
 
 ## ライセンス
 
