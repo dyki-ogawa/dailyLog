@@ -19,8 +19,8 @@ body {
 }
 
 .signin-icon-btn {
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     background: none;
     border: none;
     padding: 0;
@@ -29,13 +29,13 @@ body {
 }
 
 .signin-icon-btn:hover {
-    transform: scale(1.05);
+    opacity: 0.7;
 }
 
 .signin-icon-btn img {
     display: block;
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
 }
 
 .user-menu {
@@ -43,8 +43,8 @@ body {
 }
 
 .user-icon-btn {
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     background: none;
     border: none;
     padding: 0;
@@ -53,18 +53,18 @@ body {
 }
 
 .user-icon-btn:hover {
-    transform: scale(1.05);
+    opacity: 0.7;
 }
 
 .user-icon-btn img {
     display: block;
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
 }
 
 .dropdown-menu {
     position: absolute;
-    top: 50px;
+    top: 36px;
     right: 0;
     background: white;
     border-radius: 8px;
@@ -358,23 +358,23 @@ body {
     }
 
     .signin-icon-btn {
-        width: 36px;
-        height: 36px;
+        width: 26px;
+        height: 26px;
     }
 
     .signin-icon-btn img {
-        width: 36px;
-        height: 36px;
+        width: 26px;
+        height: 26px;
     }
 
     .user-icon-btn {
-        width: 36px;
-        height: 36px;
+        width: 26px;
+        height: 26px;
     }
 
     .user-icon-btn img {
-        width: 36px;
-        height: 36px;
+        width: 26px;
+        height: 26px;
     }
 
     .dropdown-menu {
