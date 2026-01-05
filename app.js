@@ -62,11 +62,6 @@ function init() {
             };
             showUserMenu();
             loadDiariesFromFirestore();
-
-            // アプリ起動時に今日の日記モーダルを自動表示
-            setTimeout(() => {
-                openDiaryModal(new Date());
-            }, 100);
         } else {
             // 未ログイン
             currentUser = null;
