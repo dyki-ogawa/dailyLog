@@ -7,14 +7,13 @@ let db = null;
 let auth = null;
 
 // Firebase設定
-// TODO: Firebaseコンソールでプロジェクトを作成し、以下の設定を更新してください
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyC1w-Qg878iiGvFrHEHXfPrRNVv9xiQbK8",
+    authDomain: "dailylog-8bd4b.firebaseapp.com",
+    projectId: "dailylog-8bd4b",
+    storageBucket: "dailylog-8bd4b.firebasestorage.app",
+    messagingSenderId: "315543963154",
+    appId: "1:315543963154:web:43f2b16646c54ae6bbfacb"
 };
 
 // Firebaseを初期化
