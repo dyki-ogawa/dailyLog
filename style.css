@@ -284,12 +284,26 @@ body {
     animation: slideUp 0.2s ease-out;
 }
 
+.modal.closing {
+    display: flex;
+    animation: slideDown 0.2s ease-in;
+}
+
 @keyframes slideUp {
     from {
         transform: translateY(100%);
     }
     to {
         transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
     }
 }
 

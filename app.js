@@ -273,6 +273,14 @@ function openDiaryModal(date) {
 // 日記モーダルを閉じる
 function closeDiaryModal() {
     modal.classList.remove('show');
+    modal.classList.add('closing');
+
+    // アニメーション終了後にclosingクラスを削除
+    modal.addEventListener('animationend', function handleAnimationEnd() {
+        modal.classList.remove('closing');
+        modal.removeEventListener('animationend', handleAnimationEnd);
+    });
+
     selectedDate = null;
 }
 
